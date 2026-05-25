@@ -71,7 +71,12 @@ function StoryDetail() {
 
   const favM = useMutation({
     mutationFn: () => favToggle({ data: { story_id: storyQ.data!.id } }),
-    onSuccess: (r) => { qc.invalidateQueries({ queryKey: ["fav", storyQ.data?.id] }); toast.success(r.favorited ? "Ditambahkan ke favorit." : "Dihapus dari favorit."); },
+    onSuccess: (r) => {
+      qc.invalidateQueries({ queryKey: ["fav", storyQ.data?.id] });
+      qc.invalidateQueries({ queryKey: ["story", slug] });
+      qc.invalidateQueries({ queryKey: ["library"] });
+      toast.success(r.favorited ? "Ditambahkan ke favorit." : "Dihapus dari favorit.");
+    },
     onError: (e: Error) => toast.error(e.message),
   });
   const followM = useMutation({
