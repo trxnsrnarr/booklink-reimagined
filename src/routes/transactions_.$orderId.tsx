@@ -20,7 +20,16 @@ interface Tx {
   status: string; payment_type: string | null; snap_token: string | null;
   paid_at: string | null; created_at: string; midtrans_response: unknown;
   tx_type?: string;
+  meta?: { game?: string; level?: number; tenths?: number; label?: string } | null;
 }
+
+const GAME_LABELS: Record<string, string> = {
+  flappy: "Flappy BookBird",
+  memory: "Memory Match",
+  reflex: "Reflex Strike",
+  tap: "Target Hunt",
+  puzzle: "Number Rush",
+};
 
 const STATUS_META: Record<string, { label: string; cls: string; ring: string; icon: typeof CheckCircle2 }> = {
   success: { label: "Berhasil", cls: "text-primary bg-primary/15", ring: "ring-primary/30", icon: CheckCircle2 },
@@ -153,9 +162,12 @@ function TxDetail() {
   const Icon = meta.icon;
   const totalCoin = tx.coin_amount + (tx.bonus_coin ?? 0);
   const isVip = tx.tx_type === "vip_sub" || tx.order_id.startsWith("VIP-");
-  const typeLabel = tx.tx_type === "vip_story" ? "Aktivasi Story VIP" : tx.tx_type === "paid_chapter" ? "Aktivasi Chapter Premium" : isVip ? "VIP Subscription" : "Top-up Koin";
-  const successLabel = tx.tx_type === "vip_story" ? "Story VIP aktif & terbit 🎉" : tx.tx_type === "paid_chapter" ? "Chapter Premium • 10 Coin aktif" : isVip ? "VIP aktif 👑" : `+${totalCoin} koin masuk!`;
-  const fulfillmentLabel = tx.tx_type === "vip_story" ? "Story VIP diterbitkan" : tx.tx_type === "paid_chapter" ? "Chapter premium aktif" : isVip ? "VIP aktif" : "Koin ditambahkan";
+  const isGameReward = tx.tx_type === "game_reward";
+  const gameReward = (tx.meta?.tenths ?? 0) / 10;
+  const gameLabel = tx.meta?.game ? (GAME_LABELS[tx.meta.game] ?? tx.meta.game) : "Mini Game";
+  const typeLabel = isGameReward ? "Mini Game Reward" : tx.tx_type === "vip_story" ? "Aktivasi Story VIP" : tx.tx_type === "paid_chapter" ? "Aktivasi Chapter Premium" : isVip ? "VIP Subscription" : "Top-up Koin";
+  const successLabel = isGameReward ? `+${gameReward.toLocaleString("id-ID", { maximumFractionDigits: 1 })} coin dari ${gameLabel}` : tx.tx_type === "vip_story" ? "Story VIP aktif & terbit 🎉" : tx.tx_type === "paid_chapter" ? "Chapter Premium • 10 Coin aktif" : isVip ? "VIP aktif 👑" : `+${totalCoin} koin masuk!`;
+  const fulfillmentLabel = isGameReward ? "Reward game masuk wallet" : tx.tx_type === "vip_story" ? "Story VIP diterbitkan" : tx.tx_type === "paid_chapter" ? "Chapter premium aktif" : isVip ? "VIP aktif" : "Koin ditambahkan";
 
   return (
     <div className="mx-auto max-w-2xl px-4 sm:px-6 py-10">
