@@ -200,8 +200,8 @@ function FlappyGame({ session }: { session: Session }) {
         {/* book-column pipes */}
         {pipesRef.current.map((p, i) => (
           <div key={i}>
-            <div className="absolute" style={{ left: p.x, top: 0, width: PIPE_W, height: p.gapY - GAP / 2, background: "linear-gradient(90deg,#6b3a1a,#8b5a2b 40%,#a0522d 60%,#6b3a1a)", borderRight: "3px solid #3a1f0e", borderBottom: "5px solid #422006", boxShadow: "inset 0 0 0 1px rgba(245,222,179,0.2)" }} />
-            <div className="absolute" style={{ left: p.x, top: p.gapY + GAP / 2, width: PIPE_W, height: H - (p.gapY + GAP / 2), background: "linear-gradient(90deg,#6b3a1a,#8b5a2b 40%,#a0522d 60%,#6b3a1a)", borderRight: "3px solid #3a1f0e", borderTop: "5px solid #422006", boxShadow: "inset 0 0 0 1px rgba(245,222,179,0.2)" }} />
+            <div className="absolute" style={{ left: p.x, top: 0, width: PIPE_W, height: p.gapY - gap / 2, background: "linear-gradient(90deg,#6b3a1a,#8b5a2b 40%,#a0522d 60%,#6b3a1a)", borderRight: "3px solid #3a1f0e", borderBottom: "5px solid #422006", boxShadow: "inset 0 0 0 1px rgba(245,222,179,0.2)" }} />
+            <div className="absolute" style={{ left: p.x, top: p.gapY + gap / 2, width: PIPE_W, height: H - (p.gapY + gap / 2), background: "linear-gradient(90deg,#6b3a1a,#8b5a2b 40%,#a0522d 60%,#6b3a1a)", borderRight: "3px solid #3a1f0e", borderTop: "5px solid #422006", boxShadow: "inset 0 0 0 1px rgba(245,222,179,0.2)" }} />
           </div>
         ))}
 
