@@ -38,6 +38,7 @@ const GAMES: Game[] = [
 
 function MiniGamesHub() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const fetchStats = useServerFn(getGameStats);
   const fetchProgress = useServerFn(getGameProgress);
   const stats = useQuery({ queryKey: ["game-stats"], queryFn: () => fetchStats(), enabled: !!user });
@@ -45,6 +46,19 @@ function MiniGamesHub() {
 
   const progressMap = new Map((progress.data ?? []).map((p) => [p.game_name, p]));
   const limitReached = (stats.data?.remaining_tenths ?? 30) <= 0;
+  const [limitOpen, setLimitOpen] = useState(false);
+
+  const onGameClick = (e: React.MouseEvent, slug: string) => {
+    if (limitReached) {
+      e.preventDefault();
+      setLimitOpen(true);
+      return;
+    }
+    if (!user) {
+      e.preventDefault();
+      navigate({ to: "/login" });
+    }
+  };
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: BOOKLINK_BG }}>
