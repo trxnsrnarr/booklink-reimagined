@@ -35,6 +35,7 @@ import { Route as TransactionsOrderIdRouteImport } from './routes/transactions_.
 import { Route as TransactionOrderIdRouteImport } from './routes/transaction.$orderId'
 import { Route as StorySlugRouteImport } from './routes/story.$slug'
 import { Route as ReadChapterIdRouteImport } from './routes/read.$chapterId'
+import { Route as MiniGamesGameIdRouteImport } from './routes/mini-games_.$gameId'
 import { Route as CheckoutPackageIdRouteImport } from './routes/checkout.$packageId'
 import { Route as ChatConversationIdRouteImport } from './routes/chat_.$conversationId'
 import { Route as AdminWithdrawalsRouteImport } from './routes/admin.withdrawals'
@@ -175,6 +176,11 @@ const ReadChapterIdRoute = ReadChapterIdRouteImport.update({
   path: '/read/$chapterId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MiniGamesGameIdRoute = MiniGamesGameIdRouteImport.update({
+  id: '/mini-games_/$gameId',
+  path: '/mini-games/$gameId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutPackageIdRoute = CheckoutPackageIdRouteImport.update({
   id: '/checkout/$packageId',
   path: '/checkout/$packageId',
@@ -191,9 +197,9 @@ const AdminWithdrawalsRoute = AdminWithdrawalsRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const MiniGamesGameIdPlayRoute = MiniGamesGameIdPlayRouteImport.update({
-  id: '/mini-games_/$gameId/play',
-  path: '/mini-games/$gameId/play',
-  getParentRoute: () => rootRouteImport,
+  id: '/play',
+  path: '/play',
+  getParentRoute: () => MiniGamesGameIdRoute,
 } as any)
 const CheckoutVipPlanRoute = CheckoutVipPlanRouteImport.update({
   id: '/checkout/vip/$plan',
@@ -248,6 +254,7 @@ export interface FileRoutesByFullPath {
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/chat/$conversationId': typeof ChatConversationIdRoute
   '/checkout/$packageId': typeof CheckoutPackageIdRoute
+  '/mini-games/$gameId': typeof MiniGamesGameIdRouteWithChildren
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/transaction/$orderId': typeof TransactionOrderIdRoute
@@ -285,6 +292,7 @@ export interface FileRoutesByTo {
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/chat/$conversationId': typeof ChatConversationIdRoute
   '/checkout/$packageId': typeof CheckoutPackageIdRoute
+  '/mini-games/$gameId': typeof MiniGamesGameIdRouteWithChildren
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/transaction/$orderId': typeof TransactionOrderIdRoute
@@ -323,6 +331,7 @@ export interface FileRoutesById {
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/chat_/$conversationId': typeof ChatConversationIdRoute
   '/checkout/$packageId': typeof CheckoutPackageIdRoute
+  '/mini-games_/$gameId': typeof MiniGamesGameIdRouteWithChildren
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/transaction/$orderId': typeof TransactionOrderIdRoute
@@ -362,6 +371,7 @@ export interface FileRouteTypes {
     | '/admin/withdrawals'
     | '/chat/$conversationId'
     | '/checkout/$packageId'
+    | '/mini-games/$gameId'
     | '/read/$chapterId'
     | '/story/$slug'
     | '/transaction/$orderId'
@@ -399,6 +409,7 @@ export interface FileRouteTypes {
     | '/admin/withdrawals'
     | '/chat/$conversationId'
     | '/checkout/$packageId'
+    | '/mini-games/$gameId'
     | '/read/$chapterId'
     | '/story/$slug'
     | '/transaction/$orderId'
@@ -436,6 +447,7 @@ export interface FileRouteTypes {
     | '/admin/withdrawals'
     | '/chat_/$conversationId'
     | '/checkout/$packageId'
+    | '/mini-games_/$gameId'
     | '/read/$chapterId'
     | '/story/$slug'
     | '/transaction/$orderId'
@@ -474,6 +486,7 @@ export interface RootRouteChildren {
   AdminWithdrawalsRoute: typeof AdminWithdrawalsRoute
   ChatConversationIdRoute: typeof ChatConversationIdRoute
   CheckoutPackageIdRoute: typeof CheckoutPackageIdRoute
+  MiniGamesGameIdRoute: typeof MiniGamesGameIdRouteWithChildren
   ReadChapterIdRoute: typeof ReadChapterIdRoute
   StorySlugRoute: typeof StorySlugRoute
   TransactionOrderIdRoute: typeof TransactionOrderIdRoute
@@ -483,7 +496,6 @@ export interface RootRouteChildren {
   CheckoutChapterPaidChapterIdRoute: typeof CheckoutChapterPaidChapterIdRoute
   CheckoutStoryVipStoryIdRoute: typeof CheckoutStoryVipStoryIdRoute
   CheckoutVipPlanRoute: typeof CheckoutVipPlanRoute
-  MiniGamesGameIdPlayRoute: typeof MiniGamesGameIdPlayRoute
   ApiPublicMidtransNotificationRoute: typeof ApiPublicMidtransNotificationRoute
   ApiPublicMidtransWebhookRoute: typeof ApiPublicMidtransWebhookRoute
 }
@@ -672,6 +684,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReadChapterIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mini-games_/$gameId': {
+      id: '/mini-games_/$gameId'
+      path: '/mini-games/$gameId'
+      fullPath: '/mini-games/$gameId'
+      preLoaderRoute: typeof MiniGamesGameIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout/$packageId': {
       id: '/checkout/$packageId'
       path: '/checkout/$packageId'
@@ -695,10 +714,10 @@ declare module '@tanstack/react-router' {
     }
     '/mini-games_/$gameId/play': {
       id: '/mini-games_/$gameId/play'
-      path: '/mini-games/$gameId/play'
+      path: '/play'
       fullPath: '/mini-games/$gameId/play'
       preLoaderRoute: typeof MiniGamesGameIdPlayRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MiniGamesGameIdRoute
     }
     '/checkout/vip/$plan': {
       id: '/checkout/vip/$plan'
@@ -738,6 +757,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface MiniGamesGameIdRouteChildren {
+  MiniGamesGameIdPlayRoute: typeof MiniGamesGameIdPlayRoute
+}
+
+const MiniGamesGameIdRouteChildren: MiniGamesGameIdRouteChildren = {
+  MiniGamesGameIdPlayRoute: MiniGamesGameIdPlayRoute,
+}
+
+const MiniGamesGameIdRouteWithChildren = MiniGamesGameIdRoute._addFileChildren(
+  MiniGamesGameIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -762,6 +793,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminWithdrawalsRoute: AdminWithdrawalsRoute,
   ChatConversationIdRoute: ChatConversationIdRoute,
   CheckoutPackageIdRoute: CheckoutPackageIdRoute,
+  MiniGamesGameIdRoute: MiniGamesGameIdRouteWithChildren,
   ReadChapterIdRoute: ReadChapterIdRoute,
   StorySlugRoute: StorySlugRoute,
   TransactionOrderIdRoute: TransactionOrderIdRoute,
@@ -771,10 +803,19 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutChapterPaidChapterIdRoute: CheckoutChapterPaidChapterIdRoute,
   CheckoutStoryVipStoryIdRoute: CheckoutStoryVipStoryIdRoute,
   CheckoutVipPlanRoute: CheckoutVipPlanRoute,
-  MiniGamesGameIdPlayRoute: MiniGamesGameIdPlayRoute,
   ApiPublicMidtransNotificationRoute: ApiPublicMidtransNotificationRoute,
   ApiPublicMidtransWebhookRoute: ApiPublicMidtransWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
