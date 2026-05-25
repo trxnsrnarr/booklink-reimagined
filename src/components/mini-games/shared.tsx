@@ -152,6 +152,11 @@ export function GamePageShell({ title, subtitle, accent, mascot, thumb, children
   title: string; subtitle: string; accent?: string; mascot?: string; thumb?: string; children: React.ReactNode;
 }) {
   const { muted, toggle } = useMute();
+  const navigate = useNavigate();
+  const goBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) window.history.back();
+    else navigate({ to: "/mini-games" });
+  };
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ background: accent ?? BOOKLINK_BG }}>
       <div className="pointer-events-none absolute inset-0 opacity-40">
@@ -160,9 +165,9 @@ export function GamePageShell({ title, subtitle, accent, mascot, thumb, children
       </div>
       <div className="relative mx-auto max-w-3xl px-4 sm:px-6 py-6">
         <div className="flex items-center justify-between mb-6">
-          <Link to="/mini-games" className="inline-flex items-center gap-2 rounded-full bg-[oklch(0.99_0.01_80)] px-4 py-2 text-sm font-medium text-[oklch(0.18_0.03_50)] shadow-lg hover:scale-[1.02] transition">
+          <button onClick={goBack} className="inline-flex items-center gap-2 rounded-full bg-[oklch(0.99_0.01_80)] px-4 py-2 text-sm font-medium text-[oklch(0.18_0.03_50)] shadow-lg hover:scale-[1.02] transition">
             <ArrowLeft className="h-4 w-4" /> Kembali
-          </Link>
+          </button>
           <button onClick={toggle} aria-label="Sound" className="grid h-10 w-10 place-items-center rounded-full bg-[oklch(0.99_0.01_80)] text-[oklch(0.18_0.03_50)] shadow-lg hover:scale-[1.05] transition">
             {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
           </button>
@@ -183,6 +188,44 @@ export function GamePageShell({ title, subtitle, accent, mascot, thumb, children
         {children}
       </div>
     </div>
+  );
+}
+
+export function AdInterstitial({ onContinue }: { onContinue: () => void }) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 1800);
+    return () => clearTimeout(t);
+  }, []);
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[75] grid place-items-center bg-black/75 px-4 backdrop-blur-md"
+      >
+        <motion.div
+          initial={{ scale: 0.92, y: 24 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, opacity: 0 }}
+          className="w-full max-w-md overflow-hidden rounded-[2rem] bg-[oklch(0.99_0.01_80)] p-5 text-center text-[oklch(0.18_0.03_50)] shadow-2xl"
+        >
+          <div className="rounded-3xl border-2 border-dashed border-[oklch(0.72_0.13_65_/_0.55)] p-8" style={{ background: "linear-gradient(135deg, oklch(0.94 0.04 75), oklch(0.86 0.08 70))" }}>
+            <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl" style={{ background: BOOKLINK_GOLD }}>
+              {ready ? <ShieldCheck className="h-8 w-8 text-[oklch(0.18_0.03_50)]" /> : <Loader2 className="h-8 w-8 animate-spin text-[oklch(0.18_0.03_50)]" />}
+            </div>
+            <p className="mt-4 text-xs font-bold uppercase tracking-widest opacity-70">Sponsored Break</p>
+            <h2 className="mt-1 font-display text-2xl font-extrabold">Level selesai</h2>
+            <p className="mt-2 text-sm opacity-75">Placeholder interstitial ads. Struktur ini siap diganti Google Ads atau sponsor nanti.</p>
+          </div>
+          <button
+            onClick={onContinue}
+            disabled={!ready}
+            className="mt-4 w-full rounded-full px-5 py-3 text-sm font-bold text-[oklch(0.18_0.03_50)] shadow-lg transition disabled:opacity-50"
+            style={{ background: BOOKLINK_GOLD }}
+          >
+            {ready ? "Lanjut Level Berikutnya" : "Memuat iklan…"}
+          </button>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
