@@ -8,7 +8,8 @@ import { toast } from "sonner";
 import { claimGameReward, getGameStats, recordGamePlay, type ClaimResult } from "@/lib/games.functions";
 import { useAuth } from "@/hooks/use-auth";
 
-export const MAX_LEVEL = 10;
+export const MAX_LEVEL = 300;
+export const REWARD_EVERY = 10;
 
 // Warm BookLink palette tokens (work in both light & dark via opacity-aware UI)
 export const BOOKLINK_BG = "linear-gradient(135deg, oklch(0.22 0.04 45) 0%, oklch(0.18 0.03 50) 45%, oklch(0.13 0.02 45) 100%)";
@@ -79,10 +80,11 @@ export function useGameSession(gameName: string) {
   const recordMut = useMutation({
     mutationFn: (v: { score: number; level_completed: boolean }) =>
       record({ data: { game_name: gameName, score: v.score, level_completed: v.level_completed } }),
-    onSuccess: async (r) => {
+    onSuccess: async (r: any) => {
       qc.invalidateQueries({ queryKey: ["game-progress", gameName] });
+      qc.invalidateQueries({ queryKey: ["game-progress-all"] });
       qc.invalidateQueries({ queryKey: ["game-stats"] });
-      if (r.reached_max) {
+      if (r.reward_milestone) {
         await tryClaim();
       }
     },
