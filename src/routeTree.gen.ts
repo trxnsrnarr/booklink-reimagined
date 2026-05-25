@@ -35,10 +35,10 @@ import { Route as TransactionsOrderIdRouteImport } from './routes/transactions_.
 import { Route as TransactionOrderIdRouteImport } from './routes/transaction.$orderId'
 import { Route as StorySlugRouteImport } from './routes/story.$slug'
 import { Route as ReadChapterIdRouteImport } from './routes/read.$chapterId'
-import { Route as MiniGamesGameIdRouteImport } from './routes/mini-games.$gameId'
 import { Route as CheckoutPackageIdRouteImport } from './routes/checkout.$packageId'
 import { Route as ChatConversationIdRouteImport } from './routes/chat_.$conversationId'
 import { Route as AdminWithdrawalsRouteImport } from './routes/admin.withdrawals'
+import { Route as MiniGamesGameIdPlayRouteImport } from './routes/mini-games_.$gameId.play'
 import { Route as CheckoutVipPlanRouteImport } from './routes/checkout.vip.$plan'
 import { Route as CheckoutStoryVipStoryIdRouteImport } from './routes/checkout.story-vip.$storyId'
 import { Route as CheckoutChapterPaidChapterIdRouteImport } from './routes/checkout.chapter-paid.$chapterId'
@@ -175,11 +175,6 @@ const ReadChapterIdRoute = ReadChapterIdRouteImport.update({
   path: '/read/$chapterId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MiniGamesGameIdRoute = MiniGamesGameIdRouteImport.update({
-  id: '/$gameId',
-  path: '/$gameId',
-  getParentRoute: () => MiniGamesRoute,
-} as any)
 const CheckoutPackageIdRoute = CheckoutPackageIdRouteImport.update({
   id: '/checkout/$packageId',
   path: '/checkout/$packageId',
@@ -193,6 +188,11 @@ const ChatConversationIdRoute = ChatConversationIdRouteImport.update({
 const AdminWithdrawalsRoute = AdminWithdrawalsRouteImport.update({
   id: '/admin/withdrawals',
   path: '/admin/withdrawals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MiniGamesGameIdPlayRoute = MiniGamesGameIdPlayRouteImport.update({
+  id: '/mini-games_/$gameId/play',
+  path: '/mini-games/$gameId/play',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutVipPlanRoute = CheckoutVipPlanRouteImport.update({
@@ -234,7 +234,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
-  '/mini-games': typeof MiniGamesRouteWithChildren
+  '/mini-games': typeof MiniGamesRoute
   '/my-stories': typeof MyStoriesRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
@@ -248,7 +248,6 @@ export interface FileRoutesByFullPath {
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/chat/$conversationId': typeof ChatConversationIdRoute
   '/checkout/$packageId': typeof CheckoutPackageIdRoute
-  '/mini-games/$gameId': typeof MiniGamesGameIdRoute
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/transaction/$orderId': typeof TransactionOrderIdRoute
@@ -258,6 +257,7 @@ export interface FileRoutesByFullPath {
   '/checkout/chapter-paid/$chapterId': typeof CheckoutChapterPaidChapterIdRoute
   '/checkout/story-vip/$storyId': typeof CheckoutStoryVipStoryIdRoute
   '/checkout/vip/$plan': typeof CheckoutVipPlanRoute
+  '/mini-games/$gameId/play': typeof MiniGamesGameIdPlayRoute
   '/api/public/midtrans/notification': typeof ApiPublicMidtransNotificationRoute
   '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
 }
@@ -271,7 +271,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
-  '/mini-games': typeof MiniGamesRouteWithChildren
+  '/mini-games': typeof MiniGamesRoute
   '/my-stories': typeof MyStoriesRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
@@ -285,7 +285,6 @@ export interface FileRoutesByTo {
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/chat/$conversationId': typeof ChatConversationIdRoute
   '/checkout/$packageId': typeof CheckoutPackageIdRoute
-  '/mini-games/$gameId': typeof MiniGamesGameIdRoute
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/transaction/$orderId': typeof TransactionOrderIdRoute
@@ -295,6 +294,7 @@ export interface FileRoutesByTo {
   '/checkout/chapter-paid/$chapterId': typeof CheckoutChapterPaidChapterIdRoute
   '/checkout/story-vip/$storyId': typeof CheckoutStoryVipStoryIdRoute
   '/checkout/vip/$plan': typeof CheckoutVipPlanRoute
+  '/mini-games/$gameId/play': typeof MiniGamesGameIdPlayRoute
   '/api/public/midtrans/notification': typeof ApiPublicMidtransNotificationRoute
   '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
 }
@@ -309,7 +309,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
-  '/mini-games': typeof MiniGamesRouteWithChildren
+  '/mini-games': typeof MiniGamesRoute
   '/my-stories': typeof MyStoriesRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
@@ -323,7 +323,6 @@ export interface FileRoutesById {
   '/admin/withdrawals': typeof AdminWithdrawalsRoute
   '/chat_/$conversationId': typeof ChatConversationIdRoute
   '/checkout/$packageId': typeof CheckoutPackageIdRoute
-  '/mini-games/$gameId': typeof MiniGamesGameIdRoute
   '/read/$chapterId': typeof ReadChapterIdRoute
   '/story/$slug': typeof StorySlugRoute
   '/transaction/$orderId': typeof TransactionOrderIdRoute
@@ -333,6 +332,7 @@ export interface FileRoutesById {
   '/checkout/chapter-paid/$chapterId': typeof CheckoutChapterPaidChapterIdRoute
   '/checkout/story-vip/$storyId': typeof CheckoutStoryVipStoryIdRoute
   '/checkout/vip/$plan': typeof CheckoutVipPlanRoute
+  '/mini-games_/$gameId/play': typeof MiniGamesGameIdPlayRoute
   '/api/public/midtrans/notification': typeof ApiPublicMidtransNotificationRoute
   '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
 }
@@ -362,7 +362,6 @@ export interface FileRouteTypes {
     | '/admin/withdrawals'
     | '/chat/$conversationId'
     | '/checkout/$packageId'
-    | '/mini-games/$gameId'
     | '/read/$chapterId'
     | '/story/$slug'
     | '/transaction/$orderId'
@@ -372,6 +371,7 @@ export interface FileRouteTypes {
     | '/checkout/chapter-paid/$chapterId'
     | '/checkout/story-vip/$storyId'
     | '/checkout/vip/$plan'
+    | '/mini-games/$gameId/play'
     | '/api/public/midtrans/notification'
     | '/api/public/midtrans/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -399,7 +399,6 @@ export interface FileRouteTypes {
     | '/admin/withdrawals'
     | '/chat/$conversationId'
     | '/checkout/$packageId'
-    | '/mini-games/$gameId'
     | '/read/$chapterId'
     | '/story/$slug'
     | '/transaction/$orderId'
@@ -409,6 +408,7 @@ export interface FileRouteTypes {
     | '/checkout/chapter-paid/$chapterId'
     | '/checkout/story-vip/$storyId'
     | '/checkout/vip/$plan'
+    | '/mini-games/$gameId/play'
     | '/api/public/midtrans/notification'
     | '/api/public/midtrans/webhook'
   id:
@@ -436,7 +436,6 @@ export interface FileRouteTypes {
     | '/admin/withdrawals'
     | '/chat_/$conversationId'
     | '/checkout/$packageId'
-    | '/mini-games/$gameId'
     | '/read/$chapterId'
     | '/story/$slug'
     | '/transaction/$orderId'
@@ -446,6 +445,7 @@ export interface FileRouteTypes {
     | '/checkout/chapter-paid/$chapterId'
     | '/checkout/story-vip/$storyId'
     | '/checkout/vip/$plan'
+    | '/mini-games_/$gameId/play'
     | '/api/public/midtrans/notification'
     | '/api/public/midtrans/webhook'
   fileRoutesById: FileRoutesById
@@ -460,7 +460,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
-  MiniGamesRoute: typeof MiniGamesRouteWithChildren
+  MiniGamesRoute: typeof MiniGamesRoute
   MyStoriesRoute: typeof MyStoriesRoute
   NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
@@ -483,6 +483,7 @@ export interface RootRouteChildren {
   CheckoutChapterPaidChapterIdRoute: typeof CheckoutChapterPaidChapterIdRoute
   CheckoutStoryVipStoryIdRoute: typeof CheckoutStoryVipStoryIdRoute
   CheckoutVipPlanRoute: typeof CheckoutVipPlanRoute
+  MiniGamesGameIdPlayRoute: typeof MiniGamesGameIdPlayRoute
   ApiPublicMidtransNotificationRoute: typeof ApiPublicMidtransNotificationRoute
   ApiPublicMidtransWebhookRoute: typeof ApiPublicMidtransWebhookRoute
 }
@@ -671,13 +672,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReadChapterIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mini-games/$gameId': {
-      id: '/mini-games/$gameId'
-      path: '/$gameId'
-      fullPath: '/mini-games/$gameId'
-      preLoaderRoute: typeof MiniGamesGameIdRouteImport
-      parentRoute: typeof MiniGamesRoute
-    }
     '/checkout/$packageId': {
       id: '/checkout/$packageId'
       path: '/checkout/$packageId'
@@ -697,6 +691,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/withdrawals'
       fullPath: '/admin/withdrawals'
       preLoaderRoute: typeof AdminWithdrawalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mini-games_/$gameId/play': {
+      id: '/mini-games_/$gameId/play'
+      path: '/mini-games/$gameId/play'
+      fullPath: '/mini-games/$gameId/play'
+      preLoaderRoute: typeof MiniGamesGameIdPlayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout/vip/$plan': {
@@ -737,18 +738,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface MiniGamesRouteChildren {
-  MiniGamesGameIdRoute: typeof MiniGamesGameIdRoute
-}
-
-const MiniGamesRouteChildren: MiniGamesRouteChildren = {
-  MiniGamesGameIdRoute: MiniGamesGameIdRoute,
-}
-
-const MiniGamesRouteWithChildren = MiniGamesRoute._addFileChildren(
-  MiniGamesRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -759,7 +748,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
-  MiniGamesRoute: MiniGamesRouteWithChildren,
+  MiniGamesRoute: MiniGamesRoute,
   MyStoriesRoute: MyStoriesRoute,
   NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
@@ -782,9 +771,20 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutChapterPaidChapterIdRoute: CheckoutChapterPaidChapterIdRoute,
   CheckoutStoryVipStoryIdRoute: CheckoutStoryVipStoryIdRoute,
   CheckoutVipPlanRoute: CheckoutVipPlanRoute,
+  MiniGamesGameIdPlayRoute: MiniGamesGameIdPlayRoute,
   ApiPublicMidtransNotificationRoute: ApiPublicMidtransNotificationRoute,
   ApiPublicMidtransWebhookRoute: ApiPublicMidtransWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

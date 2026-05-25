@@ -9,7 +9,7 @@ import reflexThumb from "@/assets/games/reflex.jpg";
 import tapThumb from "@/assets/games/tap.jpg";
 import puzzleThumb from "@/assets/games/puzzle.jpg";
 
-export const Route = createFileRoute("/mini-games/$gameId")({
+export const Route = createFileRoute("/mini-games_/$gameId/play")({
   head: ({ params }) => ({
     meta: [{ title: `${labelFor(params.gameId)} — BookLink Arcade` }],
   }),
