@@ -16,6 +16,20 @@ export const Route = createFileRoute("/mini-games_/$gameId/play")({
   component: GameDispatcher,
 });
 
+const GAME_ALIASES: Record<string, "flappy" | "memory" | "reflex" | "tap" | "puzzle"> = {
+  flappy: "flappy",
+  "flappy-bookbird": "flappy",
+  memory: "memory",
+  "memory-match": "memory",
+  reflex: "reflex",
+  "reflex-strike": "reflex",
+  tap: "tap",
+  "tap-frenzy": "tap",
+  "target-hunt": "tap",
+  puzzle: "puzzle",
+  "number-rush": "puzzle",
+};
+
 // Warm BookLink backgrounds for each game
 const META: Record<string, { title: string; subtitle: string; thumb: string; bg: string }> = {
   flappy:  { title: "Flappy BookBird", subtitle: "Tap untuk terbang lewati pilar buku", thumb: flappyThumb,
@@ -30,26 +44,31 @@ const META: Record<string, { title: string; subtitle: string; thumb: string; bg:
              bg: "linear-gradient(135deg, oklch(0.32 0.05 50), oklch(0.45 0.10 50) 55%, oklch(0.78 0.13 80))" },
 };
 
-function labelFor(id: string) { return META[id]?.title ?? "Mini Game"; }
+function normalizeGameId(id: string) { return GAME_ALIASES[id] ?? null; }
+function labelFor(id: string) { const key = normalizeGameId(id); return key ? META[key].title : "Mini Game"; }
 
 function GameDispatcher() {
   const { gameId } = Route.useParams();
   const navigate = useNavigate();
-  const m = META[gameId];
-  useEffect(() => { if (!m) navigate({ to: "/mini-games" }); }, [m, navigate]);
-  if (!m) return null;
-  const session = useGameSession(gameId);
+  const activeGame = normalizeGameId(gameId);
+  const m = activeGame ? META[activeGame] : null;
+  useEffect(() => {
+    console.info(`[BookLink Arcade] gameplay route mounted: /mini-games/${gameId}/play`);
+    if (!m) navigate({ to: "/mini-games" });
+  }, [gameId, m, navigate]);
+  if (!m || !activeGame) return null;
+  const session = useGameSession(activeGame);
 
   return (
     <GamePageShell title={m.title} subtitle={m.subtitle} accent={m.bg} thumb={m.thumb}>
       <LevelHUD level={session.progress.level} best={session.progress.best_score} plays={session.progress.total_plays} limitNotice={session.limitNotice} />
 
       <div className="mt-5 rounded-3xl bg-[oklch(0.99_0.01_80)] p-4 sm:p-6 shadow-2xl text-[oklch(0.18_0.03_50)]">
-        {gameId === "flappy" && <FlappyGame session={session} />}
-        {gameId === "memory" && <MemoryGame session={session} />}
-        {gameId === "reflex" && <ReflexGame session={session} />}
-        {gameId === "tap" && <TapGame session={session} />}
-        {gameId === "puzzle" && <PuzzleGame session={session} />}
+        {activeGame === "flappy" && <FlappyGame session={session} />}
+        {activeGame === "memory" && <MemoryGame session={session} />}
+        {activeGame === "reflex" && <ReflexGame session={session} />}
+        {activeGame === "tap" && <TapGame session={session} />}
+        {activeGame === "puzzle" && <PuzzleGame session={session} />}
       </div>
 
       {session.reward && <RewardCinematic tenths={session.reward.tenths} onDone={session.dismissReward} />}
