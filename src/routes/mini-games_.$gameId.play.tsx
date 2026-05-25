@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { GamePageShell, LevelHUD, RewardCinematic, useGameSession, useMute, playBeep, BOOKLINK_GOLD } from "@/components/mini-games/shared";
+import { AdInterstitial, GamePageShell, LevelHUD, RewardCinematic, useGameSession, useMute, playBeep, BOOKLINK_GOLD } from "@/components/mini-games/shared";
 import flappyThumb from "@/assets/games/flappy.jpg";
 import memoryThumb from "@/assets/games/memory.jpg";
 import reflexThumb from "@/assets/games/reflex.jpg";
@@ -62,19 +62,30 @@ function GameDispatcher() {
 
 function GameRenderer({ activeGame, meta }: { activeGame: "flappy" | "memory" | "reflex" | "tap" | "puzzle"; meta: { title: string; subtitle: string; thumb: string; bg: string } }) {
   const session = useGameSession(activeGame);
+  const navigate = useNavigate();
 
   return (
     <GamePageShell title={meta.title} subtitle={meta.subtitle} accent={meta.bg} thumb={meta.thumb}>
       <LevelHUD level={session.progress.level} best={session.progress.best_score} plays={session.progress.total_plays} limitNotice={session.limitNotice} />
 
-      <div className="mt-5 rounded-3xl bg-[oklch(0.99_0.01_80)] p-4 sm:p-6 shadow-2xl text-[oklch(0.18_0.03_50)]">
-        {activeGame === "flappy" && <FlappyGame session={session} />}
-        {activeGame === "memory" && <MemoryGame session={session} />}
-        {activeGame === "reflex" && <ReflexGame session={session} />}
-        {activeGame === "tap" && <TapGame session={session} />}
-        {activeGame === "puzzle" && <PuzzleGame session={session} />}
-      </div>
+      {session.dailyLimitReached ? (
+        <div className="mt-5 rounded-3xl bg-[oklch(0.99_0.01_80)] p-6 text-center shadow-2xl text-[oklch(0.18_0.03_50)]">
+          <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-2xl text-2xl" style={{ background: BOOKLINK_GOLD }}>🚫</div>
+          <h2 className="font-display text-2xl font-bold">Batas reward hari ini tercapai</h2>
+          <p className="mt-2 text-sm opacity-75">Kamu sudah mencapai batas maksimal reward game hari ini. Game akan terbuka lagi otomatis besok.</p>
+          <Button className="mt-5 text-[oklch(0.18_0.03_50)] font-bold" style={{ background: BOOKLINK_GOLD }} onClick={() => navigate({ to: "/mini-games" })}>Kembali ke Arcade</Button>
+        </div>
+      ) : (
+        <div className="mt-5 rounded-3xl bg-[oklch(0.99_0.01_80)] p-4 sm:p-6 shadow-2xl text-[oklch(0.18_0.03_50)]">
+          {activeGame === "flappy" && <FlappyGame session={session} />}
+          {activeGame === "memory" && <MemoryGame session={session} />}
+          {activeGame === "reflex" && <ReflexGame session={session} />}
+          {activeGame === "tap" && <TapGame session={session} />}
+          {activeGame === "puzzle" && <PuzzleGame session={session} />}
+        </div>
+      )}
 
+      {session.adBreak && <AdInterstitial onContinue={session.completeAdBreak} />}
       {session.reward && <RewardCinematic tenths={session.reward.tenths} onDone={session.dismissReward} />}
     </GamePageShell>
   );
@@ -87,7 +98,7 @@ type Session = ReturnType<typeof useGameSession>;
 // ============================================================
 function FlappyGame({ session }: { session: Session }) {
   const W = 360, H = 480;
-  const GRAVITY = 0.45, FLAP = -7.5, GAP = 130, PIPE_W = 56, SPEED_BASE = 2.2;
+  const GRAVITY = 0.45, FLAP = -7.5, PIPE_W = 56, SPEED_BASE = 2.2;
   const { muted } = useMute();
   const [running, setRunning] = useState(false);
   const [score, setScore] = useState(0);
@@ -100,8 +111,10 @@ function FlappyGame({ session }: { session: Session }) {
   const deadRef = useRef(false);
   const [, force] = useState(0);
   const level = session.progress.level;
-  const speed = SPEED_BASE + Math.min(level * 0.05, 4);
-  const required = 3 + Math.min(Math.floor(level / 5), 17);
+  const speed = SPEED_BASE + Math.min(level * 0.075, 5.8);
+  const gap = Math.max(84, 142 - Math.floor(level * 0.45));
+  const pipeSpacing = Math.max(138, 210 - Math.floor(level * 0.55));
+  const required = 3 + Math.min(Math.floor(level / 4), 24);
 
   const reset = () => {
     yRef.current = H / 2; vRef.current = 0;
@@ -137,7 +150,7 @@ function FlappyGame({ session }: { session: Session }) {
       yRef.current += vRef.current;
       pipesRef.current = pipesRef.current.map((p) => ({ ...p, x: p.x - speed }));
       const last = pipesRef.current[pipesRef.current.length - 1];
-      if (!last || last.x < W - 200) {
+      if (!last || last.x < W - pipeSpacing) {
         pipesRef.current.push({ x: W + 30, gapY: 100 + Math.random() * (H - 240), passed: false });
       }
       pipesRef.current = pipesRef.current.filter((p) => p.x + PIPE_W > -10);
@@ -150,7 +163,7 @@ function FlappyGame({ session }: { session: Session }) {
           playBeep(muted, 1000, 50);
         }
         if (birdX + birdR > p.x && birdX - birdR < p.x + PIPE_W) {
-          if (yRef.current - birdR < p.gapY - GAP / 2 || yRef.current + birdR > p.gapY + GAP / 2) {
+          if (yRef.current - birdR < p.gapY - gap / 2 || yRef.current + birdR > p.gapY + gap / 2) {
             die();
             return;
           }
@@ -160,7 +173,7 @@ function FlappyGame({ session }: { session: Session }) {
       force((n) => n + 1);
     }, 1000 / 60);
     return () => clearInterval(tickRef.current);
-  }, [running, dead, speed, muted]);
+  }, [running, dead, speed, pipeSpacing, gap, muted]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.code === "Space") { e.preventDefault(); flap(); } };
