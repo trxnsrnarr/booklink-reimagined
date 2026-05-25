@@ -1,9 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
-import { Trophy, Coins, Flame, Sparkles, Gamepad2, Lock, Play, X } from "lucide-react";
+import { Trophy, Coins, Flame, Sparkles, Gamepad2, Lock, Play } from "lucide-react";
 import { getGameStats, getGameProgress } from "@/lib/games.functions";
 import { fmtCoins, BOOKLINK_BG, BOOKLINK_GOLD, MAX_LEVEL } from "@/components/mini-games/shared";
 import { useAuth } from "@/hooks/use-auth";
@@ -29,10 +28,10 @@ type Game = {
 };
 
 const GAMES: Game[] = [
-  { id: "flappy", slug: "flappy", title: "Flappy BookBird", tagline: "Terbang melewati pilar buku", thumb: flappyThumb, difficulty: "Sedang" },
-  { id: "memory", slug: "memory", title: "Memory Match", tagline: "Cocokkan pasangan kartu kuno", thumb: memoryThumb, difficulty: "Mudah" },
-  { id: "reflex", slug: "reflex", title: "Reflex Strike", tagline: "Uji kecepatan reaksi pasir waktu", thumb: reflexThumb, difficulty: "Sulit" },
-  { id: "tap", slug: "tap", title: "Tap Frenzy", tagline: "Tap sebanyak mungkin dalam 10 detik", thumb: tapThumb, difficulty: "Mudah" },
+  { id: "flappy", slug: "flappy-bookbird", title: "Flappy BookBird", tagline: "Terbang melewati pilar buku", thumb: flappyThumb, difficulty: "Sedang" },
+  { id: "memory", slug: "memory-match", title: "Memory Match", tagline: "Cocokkan pasangan kartu kuno", thumb: memoryThumb, difficulty: "Mudah" },
+  { id: "reflex", slug: "reflex-strike", title: "Reflex Strike", tagline: "Uji kecepatan reaksi pasir waktu", thumb: reflexThumb, difficulty: "Sulit" },
+  { id: "tap", slug: "target-hunt", title: "Target Hunt", tagline: "Tap target sebanyak mungkin dalam 10 detik", thumb: tapThumb, difficulty: "Mudah" },
   { id: "puzzle", slug: "puzzle", title: "Number Rush", tagline: "Tap angka 1-9 berurutan", thumb: puzzleThumb, difficulty: "Sedang" },
 ];
 
@@ -46,14 +45,8 @@ function MiniGamesHub() {
 
   const progressMap = new Map((progress.data ?? []).map((p) => [p.game_name, p]));
   const limitReached = (stats.data?.remaining_tenths ?? 30) <= 0;
-  const [limitOpen, setLimitOpen] = useState(false);
-
   const onGameClick = (e: React.MouseEvent, slug: string) => {
-    if (limitReached) {
-      e.preventDefault();
-      setLimitOpen(true);
-      return;
-    }
+    console.info(`[BookLink Arcade] navigate requested: /mini-games/${slug}/play`);
     if (!user) {
       e.preventDefault();
       navigate({ to: "/login" });
@@ -112,7 +105,7 @@ function MiniGamesHub() {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
               >
                 <Link
-                  to="/mini-games/$gameId" params={{ gameId: g.slug }}
+                  to="/mini-games/$gameId/play" params={{ gameId: g.slug }}
                   onClick={(e) => onGameClick(e, g.slug)}
                   className={`group block rounded-3xl overflow-hidden ring-1 ring-[oklch(0.82_0.13_80_/_0.18)] hover:ring-[oklch(0.82_0.13_80_/_0.6)] hover:-translate-y-1 transition-all shadow-2xl ${limitReached ? "opacity-60" : ""}`}
                   style={{ background: "oklch(0.18 0.025 45)" }}
@@ -131,14 +124,6 @@ function MiniGamesHub() {
                         <div className="flex flex-col items-center gap-2 text-white">
                           <Lock className="h-8 w-8" />
                           <span className="text-xs font-semibold">Login dulu</span>
-                        </div>
-                      </div>
-                    )}
-                    {limitReached && !locked && (
-                      <div className="absolute inset-0 grid place-items-center bg-black/65 backdrop-blur-sm">
-                        <div className="flex flex-col items-center gap-2 text-white">
-                          <Lock className="h-7 w-7" />
-                          <span className="text-xs font-semibold">Limit harian tercapai</span>
                         </div>
                       </div>
                     )}
@@ -161,37 +146,6 @@ function MiniGamesHub() {
             );
           })}
         </div>
-
-        <AnimatePresence>
-          {limitOpen && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[90] grid place-items-center bg-black/70 backdrop-blur-md p-4"
-              onClick={() => setLimitOpen(false)}
-            >
-              <motion.div
-                initial={{ scale: 0.7, y: 40 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.85, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 200, damping: 18 }}
-                onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-sm rounded-3xl p-8 text-center shadow-2xl"
-                style={{ background: "linear-gradient(160deg, oklch(0.22 0.04 45), oklch(0.16 0.03 45))", color: "oklch(0.97 0.02 75)" }}
-              >
-                <button onClick={() => setLimitOpen(false)} aria-label="Close" className="absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/10 hover:bg-white/20">
-                  <X className="h-4 w-4" />
-                </button>
-                <div className="mx-auto grid h-20 w-20 place-items-center rounded-full" style={{ background: BOOKLINK_GOLD }}>
-                  <Coins className="h-10 w-10 text-[oklch(0.18_0.03_50)]" />
-                </div>
-                <h3 className="mt-4 font-display text-2xl font-bold">Limit Harian Tercapai</h3>
-                <p className="mt-2 text-sm opacity-85">
-                  Kamu sudah mencapai batas maksimal reward game hari ini (3 coin). Silakan kembali besok untuk bermain lagi.
-                </p>
-                <button onClick={() => setLimitOpen(false)} className="mt-6 w-full rounded-full px-6 py-3 font-semibold text-[oklch(0.18_0.03_50)]" style={{ background: BOOKLINK_GOLD }}>
-                  Mengerti
-                </button>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {!user && (
           <div className="mt-10 text-center text-white/80">
