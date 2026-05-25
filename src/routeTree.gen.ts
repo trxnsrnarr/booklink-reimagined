@@ -9,38 +9,599 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WriteRouteImport } from './routes/write'
+import { Route as WithdrawRouteImport } from './routes/withdraw'
+import { Route as WalletRouteImport } from './routes/wallet'
+import { Route as TransactionsRouteImport } from './routes/transactions'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as MyStoriesRouteImport } from './routes/my-stories'
+import { Route as MiniGamesRouteImport } from './routes/mini-games'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as LibraryRouteImport } from './routes/library'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ChatRouteImport } from './routes/chat'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as WriteStoryIdRouteImport } from './routes/write_.$storyId'
+import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as TransactionsOrderIdRouteImport } from './routes/transactions_.$orderId'
+import { Route as TransactionOrderIdRouteImport } from './routes/transaction.$orderId'
+import { Route as StorySlugRouteImport } from './routes/story.$slug'
+import { Route as ReadChapterIdRouteImport } from './routes/read.$chapterId'
+import { Route as MiniGamesGameIdRouteImport } from './routes/mini-games.$gameId'
+import { Route as CheckoutPackageIdRouteImport } from './routes/checkout.$packageId'
+import { Route as ChatConversationIdRouteImport } from './routes/chat_.$conversationId'
+import { Route as AdminWithdrawalsRouteImport } from './routes/admin.withdrawals'
+import { Route as CheckoutVipPlanRouteImport } from './routes/checkout.vip.$plan'
+import { Route as CheckoutStoryVipStoryIdRouteImport } from './routes/checkout.story-vip.$storyId'
+import { Route as CheckoutChapterPaidChapterIdRouteImport } from './routes/checkout.chapter-paid.$chapterId'
+import { Route as ApiPublicMidtransWebhookRouteImport } from './routes/api/public/midtrans.webhook'
+import { Route as ApiPublicMidtransNotificationRouteImport } from './routes/api/public/midtrans.notification'
 
+const WriteRoute = WriteRouteImport.update({
+  id: '/write',
+  path: '/write',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WithdrawRoute = WithdrawRouteImport.update({
+  id: '/withdraw',
+  path: '/withdraw',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WalletRoute = WalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransactionsRoute = TransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyStoriesRoute = MyStoriesRouteImport.update({
+  id: '/my-stories',
+  path: '/my-stories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MiniGamesRoute = MiniGamesRouteImport.update({
+  id: '/mini-games',
+  path: '/mini-games',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WriteStoryIdRoute = WriteStoryIdRouteImport.update({
+  id: '/write_/$storyId',
+  path: '/write/$storyId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UUsernameRoute = UUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransactionsOrderIdRoute = TransactionsOrderIdRouteImport.update({
+  id: '/transactions_/$orderId',
+  path: '/transactions/$orderId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransactionOrderIdRoute = TransactionOrderIdRouteImport.update({
+  id: '/transaction/$orderId',
+  path: '/transaction/$orderId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StorySlugRoute = StorySlugRouteImport.update({
+  id: '/story/$slug',
+  path: '/story/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReadChapterIdRoute = ReadChapterIdRouteImport.update({
+  id: '/read/$chapterId',
+  path: '/read/$chapterId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MiniGamesGameIdRoute = MiniGamesGameIdRouteImport.update({
+  id: '/$gameId',
+  path: '/$gameId',
+  getParentRoute: () => MiniGamesRoute,
+} as any)
+const CheckoutPackageIdRoute = CheckoutPackageIdRouteImport.update({
+  id: '/checkout/$packageId',
+  path: '/checkout/$packageId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatConversationIdRoute = ChatConversationIdRouteImport.update({
+  id: '/chat_/$conversationId',
+  path: '/chat/$conversationId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWithdrawalsRoute = AdminWithdrawalsRouteImport.update({
+  id: '/admin/withdrawals',
+  path: '/admin/withdrawals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutVipPlanRoute = CheckoutVipPlanRouteImport.update({
+  id: '/checkout/vip/$plan',
+  path: '/checkout/vip/$plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutStoryVipStoryIdRoute = CheckoutStoryVipStoryIdRouteImport.update({
+  id: '/checkout/story-vip/$storyId',
+  path: '/checkout/story-vip/$storyId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutChapterPaidChapterIdRoute =
+  CheckoutChapterPaidChapterIdRouteImport.update({
+    id: '/checkout/chapter-paid/$chapterId',
+    path: '/checkout/chapter-paid/$chapterId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicMidtransWebhookRoute =
+  ApiPublicMidtransWebhookRouteImport.update({
+    id: '/api/public/midtrans/webhook',
+    path: '/api/public/midtrans/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicMidtransNotificationRoute =
+  ApiPublicMidtransNotificationRouteImport.update({
+    id: '/api/public/midtrans/notification',
+    path: '/api/public/midtrans/notification',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/chat': typeof ChatRoute
+  '/dashboard': typeof DashboardRoute
+  '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/mini-games': typeof MiniGamesRouteWithChildren
+  '/my-stories': typeof MyStoriesRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
+  '/transactions': typeof TransactionsRoute
+  '/wallet': typeof WalletRoute
+  '/withdraw': typeof WithdrawRoute
+  '/write': typeof WriteRoute
+  '/admin/withdrawals': typeof AdminWithdrawalsRoute
+  '/chat/$conversationId': typeof ChatConversationIdRoute
+  '/checkout/$packageId': typeof CheckoutPackageIdRoute
+  '/mini-games/$gameId': typeof MiniGamesGameIdRoute
+  '/read/$chapterId': typeof ReadChapterIdRoute
+  '/story/$slug': typeof StorySlugRoute
+  '/transaction/$orderId': typeof TransactionOrderIdRoute
+  '/transactions/$orderId': typeof TransactionsOrderIdRoute
+  '/u/$username': typeof UUsernameRoute
+  '/write/$storyId': typeof WriteStoryIdRoute
+  '/checkout/chapter-paid/$chapterId': typeof CheckoutChapterPaidChapterIdRoute
+  '/checkout/story-vip/$storyId': typeof CheckoutStoryVipStoryIdRoute
+  '/checkout/vip/$plan': typeof CheckoutVipPlanRoute
+  '/api/public/midtrans/notification': typeof ApiPublicMidtransNotificationRoute
+  '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/chat': typeof ChatRoute
+  '/dashboard': typeof DashboardRoute
+  '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/mini-games': typeof MiniGamesRouteWithChildren
+  '/my-stories': typeof MyStoriesRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
+  '/transactions': typeof TransactionsRoute
+  '/wallet': typeof WalletRoute
+  '/withdraw': typeof WithdrawRoute
+  '/write': typeof WriteRoute
+  '/admin/withdrawals': typeof AdminWithdrawalsRoute
+  '/chat/$conversationId': typeof ChatConversationIdRoute
+  '/checkout/$packageId': typeof CheckoutPackageIdRoute
+  '/mini-games/$gameId': typeof MiniGamesGameIdRoute
+  '/read/$chapterId': typeof ReadChapterIdRoute
+  '/story/$slug': typeof StorySlugRoute
+  '/transaction/$orderId': typeof TransactionOrderIdRoute
+  '/transactions/$orderId': typeof TransactionsOrderIdRoute
+  '/u/$username': typeof UUsernameRoute
+  '/write/$storyId': typeof WriteStoryIdRoute
+  '/checkout/chapter-paid/$chapterId': typeof CheckoutChapterPaidChapterIdRoute
+  '/checkout/story-vip/$storyId': typeof CheckoutStoryVipStoryIdRoute
+  '/checkout/vip/$plan': typeof CheckoutVipPlanRoute
+  '/api/public/midtrans/notification': typeof ApiPublicMidtransNotificationRoute
+  '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/chat': typeof ChatRoute
+  '/dashboard': typeof DashboardRoute
+  '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/library': typeof LibraryRoute
+  '/login': typeof LoginRoute
+  '/mini-games': typeof MiniGamesRouteWithChildren
+  '/my-stories': typeof MyStoriesRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
+  '/transactions': typeof TransactionsRoute
+  '/wallet': typeof WalletRoute
+  '/withdraw': typeof WithdrawRoute
+  '/write': typeof WriteRoute
+  '/admin/withdrawals': typeof AdminWithdrawalsRoute
+  '/chat_/$conversationId': typeof ChatConversationIdRoute
+  '/checkout/$packageId': typeof CheckoutPackageIdRoute
+  '/mini-games/$gameId': typeof MiniGamesGameIdRoute
+  '/read/$chapterId': typeof ReadChapterIdRoute
+  '/story/$slug': typeof StorySlugRoute
+  '/transaction/$orderId': typeof TransactionOrderIdRoute
+  '/transactions_/$orderId': typeof TransactionsOrderIdRoute
+  '/u/$username': typeof UUsernameRoute
+  '/write_/$storyId': typeof WriteStoryIdRoute
+  '/checkout/chapter-paid/$chapterId': typeof CheckoutChapterPaidChapterIdRoute
+  '/checkout/story-vip/$storyId': typeof CheckoutStoryVipStoryIdRoute
+  '/checkout/vip/$plan': typeof CheckoutVipPlanRoute
+  '/api/public/midtrans/notification': typeof ApiPublicMidtransNotificationRoute
+  '/api/public/midtrans/webhook': typeof ApiPublicMidtransWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/chat'
+    | '/dashboard'
+    | '/explore'
+    | '/forgot-password'
+    | '/library'
+    | '/login'
+    | '/mini-games'
+    | '/my-stories'
+    | '/notifications'
+    | '/profile'
+    | '/register'
+    | '/reset-password'
+    | '/settings'
+    | '/transactions'
+    | '/wallet'
+    | '/withdraw'
+    | '/write'
+    | '/admin/withdrawals'
+    | '/chat/$conversationId'
+    | '/checkout/$packageId'
+    | '/mini-games/$gameId'
+    | '/read/$chapterId'
+    | '/story/$slug'
+    | '/transaction/$orderId'
+    | '/transactions/$orderId'
+    | '/u/$username'
+    | '/write/$storyId'
+    | '/checkout/chapter-paid/$chapterId'
+    | '/checkout/story-vip/$storyId'
+    | '/checkout/vip/$plan'
+    | '/api/public/midtrans/notification'
+    | '/api/public/midtrans/webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/chat'
+    | '/dashboard'
+    | '/explore'
+    | '/forgot-password'
+    | '/library'
+    | '/login'
+    | '/mini-games'
+    | '/my-stories'
+    | '/notifications'
+    | '/profile'
+    | '/register'
+    | '/reset-password'
+    | '/settings'
+    | '/transactions'
+    | '/wallet'
+    | '/withdraw'
+    | '/write'
+    | '/admin/withdrawals'
+    | '/chat/$conversationId'
+    | '/checkout/$packageId'
+    | '/mini-games/$gameId'
+    | '/read/$chapterId'
+    | '/story/$slug'
+    | '/transaction/$orderId'
+    | '/transactions/$orderId'
+    | '/u/$username'
+    | '/write/$storyId'
+    | '/checkout/chapter-paid/$chapterId'
+    | '/checkout/story-vip/$storyId'
+    | '/checkout/vip/$plan'
+    | '/api/public/midtrans/notification'
+    | '/api/public/midtrans/webhook'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/chat'
+    | '/dashboard'
+    | '/explore'
+    | '/forgot-password'
+    | '/library'
+    | '/login'
+    | '/mini-games'
+    | '/my-stories'
+    | '/notifications'
+    | '/profile'
+    | '/register'
+    | '/reset-password'
+    | '/settings'
+    | '/transactions'
+    | '/wallet'
+    | '/withdraw'
+    | '/write'
+    | '/admin/withdrawals'
+    | '/chat_/$conversationId'
+    | '/checkout/$packageId'
+    | '/mini-games/$gameId'
+    | '/read/$chapterId'
+    | '/story/$slug'
+    | '/transaction/$orderId'
+    | '/transactions_/$orderId'
+    | '/u/$username'
+    | '/write_/$storyId'
+    | '/checkout/chapter-paid/$chapterId'
+    | '/checkout/story-vip/$storyId'
+    | '/checkout/vip/$plan'
+    | '/api/public/midtrans/notification'
+    | '/api/public/midtrans/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ChatRoute: typeof ChatRoute
+  DashboardRoute: typeof DashboardRoute
+  ExploreRoute: typeof ExploreRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LibraryRoute: typeof LibraryRoute
+  LoginRoute: typeof LoginRoute
+  MiniGamesRoute: typeof MiniGamesRouteWithChildren
+  MyStoriesRoute: typeof MyStoriesRoute
+  NotificationsRoute: typeof NotificationsRoute
+  ProfileRoute: typeof ProfileRoute
+  RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SettingsRoute: typeof SettingsRoute
+  TransactionsRoute: typeof TransactionsRoute
+  WalletRoute: typeof WalletRoute
+  WithdrawRoute: typeof WithdrawRoute
+  WriteRoute: typeof WriteRoute
+  AdminWithdrawalsRoute: typeof AdminWithdrawalsRoute
+  ChatConversationIdRoute: typeof ChatConversationIdRoute
+  CheckoutPackageIdRoute: typeof CheckoutPackageIdRoute
+  ReadChapterIdRoute: typeof ReadChapterIdRoute
+  StorySlugRoute: typeof StorySlugRoute
+  TransactionOrderIdRoute: typeof TransactionOrderIdRoute
+  TransactionsOrderIdRoute: typeof TransactionsOrderIdRoute
+  UUsernameRoute: typeof UUsernameRoute
+  WriteStoryIdRoute: typeof WriteStoryIdRoute
+  CheckoutChapterPaidChapterIdRoute: typeof CheckoutChapterPaidChapterIdRoute
+  CheckoutStoryVipStoryIdRoute: typeof CheckoutStoryVipStoryIdRoute
+  CheckoutVipPlanRoute: typeof CheckoutVipPlanRoute
+  ApiPublicMidtransNotificationRoute: typeof ApiPublicMidtransNotificationRoute
+  ApiPublicMidtransWebhookRoute: typeof ApiPublicMidtransWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/write': {
+      id: '/write'
+      path: '/write'
+      fullPath: '/write'
+      preLoaderRoute: typeof WriteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/withdraw': {
+      id: '/withdraw'
+      path: '/withdraw'
+      fullPath: '/withdraw'
+      preLoaderRoute: typeof WithdrawRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wallet': {
+      id: '/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof WalletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transactions': {
+      id: '/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof TransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-stories': {
+      id: '/my-stories'
+      path: '/my-stories'
+      fullPath: '/my-stories'
+      preLoaderRoute: typeof MyStoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mini-games': {
+      id: '/mini-games'
+      path: '/mini-games'
+      fullPath: '/mini-games'
+      preLoaderRoute: typeof MiniGamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +609,171 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/write_/$storyId': {
+      id: '/write_/$storyId'
+      path: '/write/$storyId'
+      fullPath: '/write/$storyId'
+      preLoaderRoute: typeof WriteStoryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/$username': {
+      id: '/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof UUsernameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transactions_/$orderId': {
+      id: '/transactions_/$orderId'
+      path: '/transactions/$orderId'
+      fullPath: '/transactions/$orderId'
+      preLoaderRoute: typeof TransactionsOrderIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transaction/$orderId': {
+      id: '/transaction/$orderId'
+      path: '/transaction/$orderId'
+      fullPath: '/transaction/$orderId'
+      preLoaderRoute: typeof TransactionOrderIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/story/$slug': {
+      id: '/story/$slug'
+      path: '/story/$slug'
+      fullPath: '/story/$slug'
+      preLoaderRoute: typeof StorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/read/$chapterId': {
+      id: '/read/$chapterId'
+      path: '/read/$chapterId'
+      fullPath: '/read/$chapterId'
+      preLoaderRoute: typeof ReadChapterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mini-games/$gameId': {
+      id: '/mini-games/$gameId'
+      path: '/$gameId'
+      fullPath: '/mini-games/$gameId'
+      preLoaderRoute: typeof MiniGamesGameIdRouteImport
+      parentRoute: typeof MiniGamesRoute
+    }
+    '/checkout/$packageId': {
+      id: '/checkout/$packageId'
+      path: '/checkout/$packageId'
+      fullPath: '/checkout/$packageId'
+      preLoaderRoute: typeof CheckoutPackageIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat_/$conversationId': {
+      id: '/chat_/$conversationId'
+      path: '/chat/$conversationId'
+      fullPath: '/chat/$conversationId'
+      preLoaderRoute: typeof ChatConversationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/withdrawals': {
+      id: '/admin/withdrawals'
+      path: '/admin/withdrawals'
+      fullPath: '/admin/withdrawals'
+      preLoaderRoute: typeof AdminWithdrawalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/vip/$plan': {
+      id: '/checkout/vip/$plan'
+      path: '/checkout/vip/$plan'
+      fullPath: '/checkout/vip/$plan'
+      preLoaderRoute: typeof CheckoutVipPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/story-vip/$storyId': {
+      id: '/checkout/story-vip/$storyId'
+      path: '/checkout/story-vip/$storyId'
+      fullPath: '/checkout/story-vip/$storyId'
+      preLoaderRoute: typeof CheckoutStoryVipStoryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/chapter-paid/$chapterId': {
+      id: '/checkout/chapter-paid/$chapterId'
+      path: '/checkout/chapter-paid/$chapterId'
+      fullPath: '/checkout/chapter-paid/$chapterId'
+      preLoaderRoute: typeof CheckoutChapterPaidChapterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/midtrans/webhook': {
+      id: '/api/public/midtrans/webhook'
+      path: '/api/public/midtrans/webhook'
+      fullPath: '/api/public/midtrans/webhook'
+      preLoaderRoute: typeof ApiPublicMidtransWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/midtrans/notification': {
+      id: '/api/public/midtrans/notification'
+      path: '/api/public/midtrans/notification'
+      fullPath: '/api/public/midtrans/notification'
+      preLoaderRoute: typeof ApiPublicMidtransNotificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface MiniGamesRouteChildren {
+  MiniGamesGameIdRoute: typeof MiniGamesGameIdRoute
+}
+
+const MiniGamesRouteChildren: MiniGamesRouteChildren = {
+  MiniGamesGameIdRoute: MiniGamesGameIdRoute,
+}
+
+const MiniGamesRouteWithChildren = MiniGamesRoute._addFileChildren(
+  MiniGamesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ChatRoute: ChatRoute,
+  DashboardRoute: DashboardRoute,
+  ExploreRoute: ExploreRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  LibraryRoute: LibraryRoute,
+  LoginRoute: LoginRoute,
+  MiniGamesRoute: MiniGamesRouteWithChildren,
+  MyStoriesRoute: MyStoriesRoute,
+  NotificationsRoute: NotificationsRoute,
+  ProfileRoute: ProfileRoute,
+  RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SettingsRoute: SettingsRoute,
+  TransactionsRoute: TransactionsRoute,
+  WalletRoute: WalletRoute,
+  WithdrawRoute: WithdrawRoute,
+  WriteRoute: WriteRoute,
+  AdminWithdrawalsRoute: AdminWithdrawalsRoute,
+  ChatConversationIdRoute: ChatConversationIdRoute,
+  CheckoutPackageIdRoute: CheckoutPackageIdRoute,
+  ReadChapterIdRoute: ReadChapterIdRoute,
+  StorySlugRoute: StorySlugRoute,
+  TransactionOrderIdRoute: TransactionOrderIdRoute,
+  TransactionsOrderIdRoute: TransactionsOrderIdRoute,
+  UUsernameRoute: UUsernameRoute,
+  WriteStoryIdRoute: WriteStoryIdRoute,
+  CheckoutChapterPaidChapterIdRoute: CheckoutChapterPaidChapterIdRoute,
+  CheckoutStoryVipStoryIdRoute: CheckoutStoryVipStoryIdRoute,
+  CheckoutVipPlanRoute: CheckoutVipPlanRoute,
+  ApiPublicMidtransNotificationRoute: ApiPublicMidtransNotificationRoute,
+  ApiPublicMidtransWebhookRoute: ApiPublicMidtransWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
