@@ -10,7 +10,7 @@ export function GameCenter() {
     <Link
       to="/mini-games"
       aria-label="Buka Mini Games"
-      className="fixed bottom-5 right-5 z-40 sm:bottom-7 sm:right-7"
+      className="fixed bottom-5 right-5 z-[70] block pointer-events-auto sm:bottom-7 sm:right-7"
     >
       <motion.div
         initial={{ opacity: 0, y: 24 }}

@@ -12,6 +12,8 @@ export type ClaimResult = {
   fraction_tenths?: number;
   required_level?: number;
   current_level?: number;
+  level?: number;
+  order_id?: string;
 };
 
 export type GameStats = {
