@@ -105,6 +105,7 @@ function MiniGamesHub() {
             const p = progressMap.get(g.id);
             const level = p?.level ?? 1;
             const locked = !user;
+            const nextReward = Math.min(MAX_LEVEL, (Math.floor(level / 10) + 1) * 10);
             return (
               <motion.div
                 key={g.id}
@@ -112,14 +113,15 @@ function MiniGamesHub() {
               >
                 <Link
                   to="/mini-games/$gameId" params={{ gameId: g.slug }}
-                  className={`group block rounded-3xl overflow-hidden ring-1 ring-[oklch(0.82_0.13_80_/_0.18)] hover:ring-[oklch(0.82_0.13_80_/_0.6)] hover:-translate-y-1 transition-all shadow-2xl ${locked ? "pointer-events-none opacity-70" : ""}`}
+                  onClick={(e) => onGameClick(e, g.slug)}
+                  className={`group block rounded-3xl overflow-hidden ring-1 ring-[oklch(0.82_0.13_80_/_0.18)] hover:ring-[oklch(0.82_0.13_80_/_0.6)] hover:-translate-y-1 transition-all shadow-2xl ${limitReached ? "opacity-60" : ""}`}
                   style={{ background: "oklch(0.18 0.025 45)" }}
                 >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img src={g.thumb} alt={g.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" width={1024} height={1024} />
                     <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 40%, oklch(0.13 0.02 45 / 0.85))" }} />
                     <div className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-black/40 backdrop-blur px-3 py-1 text-xs font-semibold text-white border border-[oklch(0.82_0.13_80_/_0.35)]">
-                      Lvl {level}/10
+                      Lvl {level}/{MAX_LEVEL}
                     </div>
                     <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[oklch(0.18_0.03_50)]" style={{ background: BOOKLINK_GOLD }}>
                       {g.difficulty}
@@ -129,6 +131,14 @@ function MiniGamesHub() {
                         <div className="flex flex-col items-center gap-2 text-white">
                           <Lock className="h-8 w-8" />
                           <span className="text-xs font-semibold">Login dulu</span>
+                        </div>
+                      </div>
+                    )}
+                    {limitReached && !locked && (
+                      <div className="absolute inset-0 grid place-items-center bg-black/65 backdrop-blur-sm">
+                        <div className="flex flex-col items-center gap-2 text-white">
+                          <Lock className="h-7 w-7" />
+                          <span className="text-xs font-semibold">Limit harian tercapai</span>
                         </div>
                       </div>
                     )}
@@ -142,15 +152,46 @@ function MiniGamesHub() {
                     </div>
                     <p className="text-sm text-[oklch(0.97_0.02_75_/_0.65)]">{g.tagline}</p>
                     <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full" style={{ background: "oklch(0.97 0.02 75 / 0.1)" }}>
-                      <div className="h-full transition-all" style={{ width: `${(level / 10) * 100}%`, background: BOOKLINK_GOLD }} />
+                      <div className="h-full transition-all" style={{ width: `${(level / MAX_LEVEL) * 100}%`, background: BOOKLINK_GOLD }} />
                     </div>
-                    <div className="mt-2 text-[11px] text-[oklch(0.97_0.02_75_/_0.55)]">Reward: 0.2 – 1 coin di Lvl 10</div>
+                    <div className="mt-2 text-[11px] text-[oklch(0.97_0.02_75_/_0.55)]">Reward berikutnya di Lvl {nextReward} • 0.2 – 1 coin</div>
                   </div>
                 </Link>
               </motion.div>
             );
           })}
         </div>
+
+        <AnimatePresence>
+          {limitOpen && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[90] grid place-items-center bg-black/70 backdrop-blur-md p-4"
+              onClick={() => setLimitOpen(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.7, y: 40 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.85, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative w-full max-w-sm rounded-3xl p-8 text-center shadow-2xl"
+                style={{ background: "linear-gradient(160deg, oklch(0.22 0.04 45), oklch(0.16 0.03 45))", color: "oklch(0.97 0.02 75)" }}
+              >
+                <button onClick={() => setLimitOpen(false)} aria-label="Close" className="absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/10 hover:bg-white/20">
+                  <X className="h-4 w-4" />
+                </button>
+                <div className="mx-auto grid h-20 w-20 place-items-center rounded-full" style={{ background: BOOKLINK_GOLD }}>
+                  <Coins className="h-10 w-10 text-[oklch(0.18_0.03_50)]" />
+                </div>
+                <h3 className="mt-4 font-display text-2xl font-bold">Limit Harian Tercapai</h3>
+                <p className="mt-2 text-sm opacity-85">
+                  Kamu sudah mencapai batas maksimal reward game hari ini (3 coin). Silakan kembali besok untuk bermain lagi.
+                </p>
+                <button onClick={() => setLimitOpen(false)} className="mt-6 w-full rounded-full px-6 py-3 font-semibold text-[oklch(0.18_0.03_50)]" style={{ background: BOOKLINK_GOLD }}>
+                  Mengerti
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {!user && (
           <div className="mt-10 text-center text-white/80">
