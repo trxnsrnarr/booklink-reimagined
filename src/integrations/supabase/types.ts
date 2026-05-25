@@ -335,6 +335,24 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_game_rewards: {
+        Row: {
+          reward_date: string
+          total_tenths: number
+          user_id: string
+        }
+        Insert: {
+          reward_date?: string
+          total_tenths?: number
+          user_id: string
+        }
+        Update: {
+          reward_date?: string
+          total_tenths?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           created_at: string
@@ -406,6 +424,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      game_progress: {
+        Row: {
+          best_score: number
+          game_name: string
+          last_played_at: string
+          level: number
+          total_plays: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          best_score?: number
+          game_name: string
+          last_played_at?: string
+          level?: number
+          total_plays?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          best_score?: number
+          game_name?: string
+          last_played_at?: string
+          level?: number
+          total_plays?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      game_rewards: {
+        Row: {
+          claimed_at: string
+          game_name: string
+          id: string
+          reward_tenths: number
+          user_id: string
+        }
+        Insert: {
+          claimed_at?: string
+          game_name: string
+          id?: string
+          reward_tenths: number
+          user_id: string
+        }
+        Update: {
+          claimed_at?: string
+          game_name?: string
+          id?: string
+          reward_tenths?: number
+          user_id?: string
+        }
+        Relationships: []
       }
       libraries: {
         Row: {
@@ -550,10 +622,14 @@ export type Database = {
           coin_balance: number
           created_at: string
           display_name: string | null
+          game_coin_tenths: number
           id: string
           is_verified: boolean
           updated_at: string
           username: string
+          vip_cycle_started_at: string | null
+          vip_unlock_limit: number
+          vip_unlock_used: number
           vip_until: string | null
         }
         Insert: {
@@ -562,10 +638,14 @@ export type Database = {
           coin_balance?: number
           created_at?: string
           display_name?: string | null
+          game_coin_tenths?: number
           id: string
           is_verified?: boolean
           updated_at?: string
           username: string
+          vip_cycle_started_at?: string | null
+          vip_unlock_limit?: number
+          vip_unlock_used?: number
           vip_until?: string | null
         }
         Update: {
@@ -574,10 +654,14 @@ export type Database = {
           coin_balance?: number
           created_at?: string
           display_name?: string | null
+          game_coin_tenths?: number
           id?: string
           is_verified?: boolean
           updated_at?: string
           username?: string
+          vip_cycle_started_at?: string | null
+          vip_unlock_limit?: number
+          vip_unlock_used?: number
           vip_until?: string | null
         }
         Relationships: []
@@ -817,6 +901,24 @@ export type Database = {
         }
         Relationships: []
       }
+      user_unlocked_vip_stories: {
+        Row: {
+          story_id: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          story_id: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          story_id?: string
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       withdrawals: {
         Row: {
           account_info: Json
@@ -859,6 +961,7 @@ export type Database = {
     }
     Functions: {
       claim_ad_reward: { Args: never; Returns: Json }
+      claim_game_reward: { Args: { _game_name: string }; Returns: Json }
       create_pending_transaction: {
         Args: {
           _amount_idr: number
@@ -891,6 +994,7 @@ export type Database = {
         }
         Returns: Json
       }
+      get_game_stats: { Args: never; Returns: Json }
       get_or_create_conversation: { Args: { _other: string }; Returns: string }
       has_role: {
         Args: {
@@ -914,6 +1018,10 @@ export type Database = {
         Returns: undefined
       }
       record_chapter_view: { Args: { _chapter_id: string }; Returns: undefined }
+      record_game_play: {
+        Args: { _game_name: string; _level_completed: boolean; _score: number }
+        Returns: Json
+      }
       record_reading_progress: {
         Args: { _chapter_id: string }
         Returns: undefined
@@ -926,6 +1034,7 @@ export type Database = {
       toggle_comment_like: { Args: { _comment_id: string }; Returns: Json }
       toggle_story_like: { Args: { _story_id: string }; Returns: Json }
       unlock_chapter: { Args: { _chapter_id: string }; Returns: Json }
+      unlock_vip_story: { Args: { _story_id: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
