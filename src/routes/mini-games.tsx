@@ -29,10 +29,10 @@ type Game = {
 };
 
 const GAMES: Game[] = [
-  { id: "flappy", slug: "flappy", title: "Flappy BookBird", tagline: "Terbang melewati pilar buku", thumb: flappyThumb, difficulty: "Sedang" },
-  { id: "memory", slug: "memory", title: "Memory Match", tagline: "Cocokkan pasangan kartu kuno", thumb: memoryThumb, difficulty: "Mudah" },
-  { id: "reflex", slug: "reflex", title: "Reflex Strike", tagline: "Uji kecepatan reaksi pasir waktu", thumb: reflexThumb, difficulty: "Sulit" },
-  { id: "tap", slug: "tap", title: "Tap Frenzy", tagline: "Tap sebanyak mungkin dalam 10 detik", thumb: tapThumb, difficulty: "Mudah" },
+  { id: "flappy", slug: "flappy-bookbird", title: "Flappy BookBird", tagline: "Terbang melewati pilar buku", thumb: flappyThumb, difficulty: "Sedang" },
+  { id: "memory", slug: "memory-match", title: "Memory Match", tagline: "Cocokkan pasangan kartu kuno", thumb: memoryThumb, difficulty: "Mudah" },
+  { id: "reflex", slug: "reflex-strike", title: "Reflex Strike", tagline: "Uji kecepatan reaksi pasir waktu", thumb: reflexThumb, difficulty: "Sulit" },
+  { id: "tap", slug: "target-hunt", title: "Target Hunt", tagline: "Tap target sebanyak mungkin dalam 10 detik", thumb: tapThumb, difficulty: "Mudah" },
   { id: "puzzle", slug: "puzzle", title: "Number Rush", tagline: "Tap angka 1-9 berurutan", thumb: puzzleThumb, difficulty: "Sedang" },
 ];
 
@@ -49,6 +49,7 @@ function MiniGamesHub() {
   const [limitOpen, setLimitOpen] = useState(false);
 
   const onGameClick = (e: React.MouseEvent, slug: string) => {
+    console.info(`[BookLink Arcade] navigate requested: /mini-games/${slug}/play`);
     if (limitReached) {
       e.preventDefault();
       setLimitOpen(true);
@@ -112,7 +113,7 @@ function MiniGamesHub() {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
               >
                 <Link
-                  to="/mini-games/$gameId" params={{ gameId: g.slug }}
+                  to="/mini-games/$gameId/play" params={{ gameId: g.slug }}
                   onClick={(e) => onGameClick(e, g.slug)}
                   className={`group block rounded-3xl overflow-hidden ring-1 ring-[oklch(0.82_0.13_80_/_0.18)] hover:ring-[oklch(0.82_0.13_80_/_0.6)] hover:-translate-y-1 transition-all shadow-2xl ${limitReached ? "opacity-60" : ""}`}
                   style={{ background: "oklch(0.18 0.025 45)" }}
