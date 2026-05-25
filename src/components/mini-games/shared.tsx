@@ -187,11 +187,12 @@ export function LevelHUD({ level, best, plays, limitNotice }: { level: number; b
           style={{ background: BOOKLINK_GOLD }}
         />
       </div>
-      {level >= MAX_LEVEL && !limitNotice && (
-        <div className="mt-2 text-xs font-medium" style={{ color: "oklch(0.55 0.13 45)" }}>Level {MAX_LEVEL} tercapai! Reward sedang diberikan…</div>
-      )}
+      <div className="mt-2 flex items-center justify-between text-[11px] opacity-70">
+        <span>Reward berikutnya di Level {Math.min(MAX_LEVEL, (Math.floor(level / 10) + 1) * 10)}</span>
+        <span>{MAX_LEVEL - level} level tersisa</span>
+      </div>
       {limitNotice && (
-        <div className="mt-2 text-xs font-medium" style={{ color: "oklch(0.55 0.18 60)" }}>Batas reward harian tercapai — kamu masih bisa bermain, coin tidak diberikan lagi hari ini.</div>
+        <div className="mt-2 text-xs font-medium" style={{ color: "oklch(0.55 0.18 60)" }}>Batas reward harian tercapai — coin tidak diberikan lagi hari ini.</div>
       )}
     </div>
   );
