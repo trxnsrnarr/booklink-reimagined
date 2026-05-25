@@ -1,10 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { AnimatePresence, motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Trophy, Coins, Flame, Sparkles, Gamepad2, Lock, Play } from "lucide-react";
+import { useState } from "react";
+import { Trophy, Coins, Flame, Sparkles, Gamepad2, Lock, Play, X } from "lucide-react";
 import { getGameStats, getGameProgress } from "@/lib/games.functions";
-import { fmtCoins, BOOKLINK_BG, BOOKLINK_GOLD } from "@/components/mini-games/shared";
+import { fmtCoins, BOOKLINK_BG, BOOKLINK_GOLD, MAX_LEVEL } from "@/components/mini-games/shared";
 import { useAuth } from "@/hooks/use-auth";
 import flappyThumb from "@/assets/games/flappy.jpg";
 import memoryThumb from "@/assets/games/memory.jpg";
