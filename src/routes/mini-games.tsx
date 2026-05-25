@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { Trophy, Coins, Flame, Sparkles, Gamepad2, Lock, Play, X } from "lucide-react";
+import { Trophy, Coins, Flame, Sparkles, Gamepad2, Lock, Play } from "lucide-react";
 import { getGameStats, getGameProgress } from "@/lib/games.functions";
 import { fmtCoins, BOOKLINK_BG, BOOKLINK_GOLD, MAX_LEVEL } from "@/components/mini-games/shared";
 import { useAuth } from "@/hooks/use-auth";
@@ -46,15 +46,8 @@ function MiniGamesHub() {
 
   const progressMap = new Map((progress.data ?? []).map((p) => [p.game_name, p]));
   const limitReached = (stats.data?.remaining_tenths ?? 30) <= 0;
-  const [limitOpen, setLimitOpen] = useState(false);
-
   const onGameClick = (e: React.MouseEvent, slug: string) => {
     console.info(`[BookLink Arcade] navigate requested: /mini-games/${slug}/play`);
-    if (limitReached) {
-      e.preventDefault();
-      setLimitOpen(true);
-      return;
-    }
     if (!user) {
       e.preventDefault();
       navigate({ to: "/login" });
@@ -135,14 +128,6 @@ function MiniGamesHub() {
                         </div>
                       </div>
                     )}
-                    {limitReached && !locked && (
-                      <div className="absolute inset-0 grid place-items-center bg-black/65 backdrop-blur-sm">
-                        <div className="flex flex-col items-center gap-2 text-white">
-                          <Lock className="h-7 w-7" />
-                          <span className="text-xs font-semibold">Limit harian tercapai</span>
-                        </div>
-                      </div>
-                    )}
                   </div>
                   <div className="p-4 text-[oklch(0.97_0.02_75)]">
                     <div className="flex items-center justify-between gap-2">
@@ -162,37 +147,6 @@ function MiniGamesHub() {
             );
           })}
         </div>
-
-        <AnimatePresence>
-          {limitOpen && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[90] grid place-items-center bg-black/70 backdrop-blur-md p-4"
-              onClick={() => setLimitOpen(false)}
-            >
-              <motion.div
-                initial={{ scale: 0.7, y: 40 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.85, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 200, damping: 18 }}
-                onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-sm rounded-3xl p-8 text-center shadow-2xl"
-                style={{ background: "linear-gradient(160deg, oklch(0.22 0.04 45), oklch(0.16 0.03 45))", color: "oklch(0.97 0.02 75)" }}
-              >
-                <button onClick={() => setLimitOpen(false)} aria-label="Close" className="absolute top-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/10 hover:bg-white/20">
-                  <X className="h-4 w-4" />
-                </button>
-                <div className="mx-auto grid h-20 w-20 place-items-center rounded-full" style={{ background: BOOKLINK_GOLD }}>
-                  <Coins className="h-10 w-10 text-[oklch(0.18_0.03_50)]" />
-                </div>
-                <h3 className="mt-4 font-display text-2xl font-bold">Limit Harian Tercapai</h3>
-                <p className="mt-2 text-sm opacity-85">
-                  Kamu sudah mencapai batas maksimal reward game hari ini (3 coin). Silakan kembali besok untuk bermain lagi.
-                </p>
-                <button onClick={() => setLimitOpen(false)} className="mt-6 w-full rounded-full px-6 py-3 font-semibold text-[oklch(0.18_0.03_50)]" style={{ background: BOOKLINK_GOLD }}>
-                  Mengerti
-                </button>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {!user && (
           <div className="mt-10 text-center text-white/80">
