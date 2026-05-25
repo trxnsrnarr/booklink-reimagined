@@ -42,10 +42,15 @@ function WalletPage() {
     if (!user) return;
     const ch = supabase.channel("wallet-tx-" + user.id).on(
       "postgres_changes",
-      { event: "UPDATE", schema: "public", table: "transactions", filter: `user_id=eq.${user.id}` },
+      { event: "*", schema: "public", table: "transactions", filter: `user_id=eq.${user.id}` },
       (payload) => {
         const newStatus = (payload.new as { status?: string })?.status;
-        if (newStatus === "success") { toast.success("Pembayaran sukses! Saldo diperbarui."); refreshProfile(); qc.invalidateQueries({ queryKey: ["author-dashboard"] }); }
+        const txType = (payload.new as { tx_type?: string })?.tx_type;
+        if (newStatus === "success") {
+          if (txType === "game_reward") toast.success("Reward game masuk ke wallet.");
+          else toast.success("Pembayaran sukses! Saldo diperbarui.");
+          refreshProfile(); qc.invalidateQueries({ queryKey: ["author-dashboard"] });
+        }
         qc.invalidateQueries({ queryKey: ["my-transactions"] });
       }
     ).subscribe();
