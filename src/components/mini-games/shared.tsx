@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "@tanstack/react-router";
-import { ArrowLeft, Coins, Trophy, Volume2, VolumeX } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { ArrowLeft, Coins, Loader2, ShieldCheck, Trophy, Volume2, VolumeX } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -61,6 +61,7 @@ export function useGameSession(gameName: string) {
   const claim = useServerFn(claimGameReward);
   const [reward, setReward] = useState<{ tenths: number } | null>(null);
   const [limitNotice, setLimitNotice] = useState(false);
+  const [adBreak, setAdBreak] = useState<{ score: number; startedAt: number } | null>(null);
 
   const statsQ = useQuery({
     queryKey: ["game-stats"],
@@ -84,6 +85,8 @@ export function useGameSession(gameName: string) {
       qc.invalidateQueries({ queryKey: ["game-progress", gameName] });
       qc.invalidateQueries({ queryKey: ["game-progress-all"] });
       qc.invalidateQueries({ queryKey: ["game-stats"] });
+      qc.invalidateQueries({ queryKey: ["my-transactions"] });
+      qc.invalidateQueries({ queryKey: ["author-dashboard"] });
       if (r.reward_milestone) {
         await tryClaim();
       }
@@ -96,7 +99,10 @@ export function useGameSession(gameName: string) {
     onSuccess: (r: ClaimResult) => {
       qc.invalidateQueries({ queryKey: ["game-stats"] });
       qc.invalidateQueries({ queryKey: ["game-progress", gameName] });
-      refreshProfile();
+      qc.invalidateQueries({ queryKey: ["game-progress-all"] });
+      qc.invalidateQueries({ queryKey: ["my-transactions"] });
+      qc.invalidateQueries({ queryKey: ["author-dashboard"] });
+      void refreshProfile();
       if (r.status === "limit_reached") {
         setLimitNotice(true);
         toast.info("Batas reward harian 3 coin tercapai. Kamu masih bisa bermain tanpa reward tambahan hari ini.");
@@ -116,10 +122,15 @@ export function useGameSession(gameName: string) {
   }
 
   function onLevelComplete(score: number) {
-    recordMut.mutate({ score, level_completed: true });
+    setAdBreak({ score, startedAt: Date.now() });
   }
   function onPlay(score: number) {
     recordMut.mutate({ score, level_completed: false });
+  }
+  function completeAdBreak() {
+    const score = adBreak?.score ?? 0;
+    setAdBreak(null);
+    recordMut.mutate({ score, level_completed: true });
   }
 
   return {
@@ -127,6 +138,9 @@ export function useGameSession(gameName: string) {
     progress: progressQ.data ?? { level: 1, best_score: 0, total_plays: 0 },
     reward, dismissReward: () => setReward(null),
     limitNotice,
+    dailyLimitReached: (statsQ.data?.remaining_tenths ?? 30) <= 0,
+    adBreak,
+    completeAdBreak,
     onLevelComplete,
     onPlay,
     rewardPending: claimMut.isPending,
