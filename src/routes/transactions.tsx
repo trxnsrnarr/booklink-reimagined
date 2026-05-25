@@ -18,7 +18,17 @@ interface Transaction {
   payment_type: string | null;
   paid_at: string | null;
   created_at: string;
+  tx_type?: string;
+  meta?: { game?: string; level?: number; tenths?: number; label?: string } | null;
 }
+
+const GAME_LABELS: Record<string, string> = {
+  flappy: "Flappy BookBird",
+  memory: "Memory Match",
+  reflex: "Reflex Strike",
+  tap: "Target Hunt",
+  puzzle: "Number Rush",
+};
 
 const STATUS_META: Record<string, { label: string; cls: string; icon: typeof CheckCircle2 }> = {
   success: { label: "Berhasil", cls: "text-primary bg-primary/15", icon: CheckCircle2 },
@@ -81,6 +91,9 @@ function TxPage() {
             const meta = STATUS_META[t.status] ?? STATUS_META.pending;
             const Icon = meta.icon;
             const total = t.coin_amount + (t.bonus_coin ?? 0);
+            const isGameReward = t.tx_type === "game_reward";
+            const gameReward = (t.meta?.tenths ?? 0) / 10;
+            const gameLabel = t.meta?.game ? (GAME_LABELS[t.meta.game] ?? t.meta.game) : "Mini Game";
             return (
               <li key={t.id}>
               <Link to="/transactions/$orderId" params={{ orderId: t.order_id }} className="glass rounded-2xl p-4 flex items-center gap-4 flex-wrap hover-lift hover:bg-accent/30 transition-colors">
@@ -88,14 +101,14 @@ function TxPage() {
                   <Icon className="h-5 w-5" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">+{total} koin {t.bonus_coin > 0 && <span className="text-xs text-primary">({t.coin_amount}+{t.bonus_coin})</span>}</p>
+                  <p className="font-medium truncate">{isGameReward ? "Mini Game Reward" : `+${total} koin`} {!isGameReward && t.bonus_coin > 0 && <span className="text-xs text-primary">({t.coin_amount}+{t.bonus_coin})</span>}</p>
                   <p className="text-xs text-muted-foreground truncate">
-                    {new Date(t.created_at).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}
+                    {isGameReward ? `+${gameReward.toLocaleString("id-ID", { maximumFractionDigits: 1 })} coin · ${gameLabel} - Level ${t.meta?.level ?? "-"}` : new Date(t.created_at).toLocaleString("id-ID", { dateStyle: "medium", timeStyle: "short" })}
                     {t.payment_type ? ` · ${t.payment_type}` : ""}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-display font-semibold">Rp {t.amount_idr.toLocaleString("id-ID")}</p>
+                  <p className="font-display font-semibold">{isGameReward ? `+${gameReward.toLocaleString("id-ID", { maximumFractionDigits: 1 })} coin` : `Rp ${t.amount_idr.toLocaleString("id-ID")}`}</p>
                   <span className={`text-[11px] px-2 py-0.5 rounded-full ${meta.cls}`}>{meta.label}</span>
                 </div>
               </Link>
