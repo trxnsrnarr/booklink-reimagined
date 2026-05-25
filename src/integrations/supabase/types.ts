@@ -430,6 +430,7 @@ export type Database = {
           best_score: number
           game_name: string
           last_played_at: string
+          last_rewarded_level: number
           level: number
           total_plays: number
           updated_at: string
@@ -439,6 +440,7 @@ export type Database = {
           best_score?: number
           game_name: string
           last_played_at?: string
+          last_rewarded_level?: number
           level?: number
           total_plays?: number
           updated_at?: string
@@ -448,6 +450,7 @@ export type Database = {
           best_score?: number
           game_name?: string
           last_played_at?: string
+          last_rewarded_level?: number
           level?: number
           total_plays?: number
           updated_at?: string
