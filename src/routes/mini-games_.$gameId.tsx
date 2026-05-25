@@ -1,7 +1,8 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import type { ElementType } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, Coins, Crosshair, Gamepad2, Play, ShieldCheck, Sparkles, Trophy } from "lucide-react";
+import { ArrowLeft, Crosshair, Gamepad2, Play, ShieldCheck, Sparkles, Trophy } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getGameProgress, getGameStats } from "@/lib/games.functions";
@@ -16,6 +17,19 @@ import puzzleThumb from "@/assets/games/puzzle.jpg";
 export const Route = createFileRoute("/mini-games_/$gameId")({
   component: MiniGameLayout,
 });
+
+type GameDetailMeta = {
+  id: string; title: string; difficulty: string; preview: string; description: string;
+  objectives: string[]; thumb: string; bg: string;
+};
+
+const GAME_DETAILS: Record<string, GameDetailMeta> = {
+  "flappy-bookbird": { id: "flappy", title: "Flappy BookBird", difficulty: "Sedang • scaling cepat", preview: "Tap, terbang, lewati pilar buku", description: "Jaga BookBird tetap terbang sambil melewati obstacle yang makin rapat dan cepat di setiap level.", objectives: ["Lewati obstacle tanpa menyentuh pilar", "Bertahan hidup sampai target score level tercapai", "Speed naik dan gap makin sempit tiap level"], thumb: flappyThumb, bg: "linear-gradient(180deg, oklch(0.42 0.10 50) 0%, oklch(0.55 0.13 55) 55%, oklch(0.72 0.13 65) 100%)" },
+  "memory-match": { id: "memory", title: "Memory Match", difficulty: "Mudah → kompleks", preview: "Buka kartu dan cocokkan simbol", description: "Temukan semua pasangan kartu kuno dengan jumlah kartu yang bertambah seiring level naik.", objectives: ["Cocokkan semua pasangan kartu", "Selesaikan dengan moves sesedikit mungkin", "Jumlah pair meningkat pada level tinggi"], thumb: memoryThumb, bg: "linear-gradient(135deg, oklch(0.22 0.04 45), oklch(0.32 0.06 45) 60%, oklch(0.45 0.10 50))" },
+  "reflex-strike": { id: "reflex", title: "Reflex Strike", difficulty: "Sulit • presisi", preview: "Tunggu hijau, lalu tap cepat", description: "Uji reaction speed dengan target waktu yang makin ketat. Tap terlalu cepat akan membatalkan ronde.", objectives: ["Klik hanya saat sinyal hijau muncul", "Jaga rata-rata reaksi di bawah target level", "Target waktu makin ketat tiap level"], thumb: reflexThumb, bg: "linear-gradient(135deg, oklch(0.16 0.03 45), oklch(0.28 0.06 50) 55%, oklch(0.55 0.13 45))" },
+  "target-hunt": { id: "tap", title: "Target Hunt", difficulty: "Mudah • stamina", preview: "Tap target sebanyak mungkin", description: "Kumpulkan tap sebelum timer habis. Goal naik bertahap agar setiap level terasa makin intens.", objectives: ["Capai jumlah tap sesuai target level", "Manfaatkan 10 detik seefisien mungkin", "Target tap meningkat pada level berikutnya"], thumb: tapThumb, bg: "linear-gradient(135deg, oklch(0.42 0.13 45), oklch(0.55 0.15 45) 55%, oklch(0.72 0.13 65))" },
+  puzzle: { id: "puzzle", title: "Number Rush", difficulty: "Sedang • fokus", preview: "Tap angka 1 sampai 9 berurutan", description: "Selesaikan urutan angka sebelum waktu habis. Timer makin ketat di level tinggi.", objectives: ["Tap angka 1–9 secara berurutan", "Jangan salah tap", "Waktu semakin pendek tiap level"], thumb: puzzleThumb, bg: "linear-gradient(135deg, oklch(0.32 0.05 50), oklch(0.45 0.10 50) 55%, oklch(0.78 0.13 80))" },
+};
 
 function MiniGameLayout() {
   const { gameId } = Route.useParams();
@@ -129,7 +143,7 @@ function GameDetail({ gameId }: { gameId: string }) {
   );
 }
 
-function InfoTile({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
+function InfoTile({ icon: Icon, label, value }: { icon: ElementType; label: string; value: string }) {
   return <div className="rounded-2xl p-3" style={{ background: "oklch(0.94 0.04 75)" }}><Icon className="mx-auto h-4 w-4 opacity-70" /><p className="mt-1 text-[10px] uppercase tracking-widest opacity-60">{label}</p><p className="font-display text-xl font-bold">{value}</p></div>;
 }
 
