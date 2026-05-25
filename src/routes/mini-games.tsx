@@ -1,8 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
 import { Trophy, Coins, Flame, Sparkles, Gamepad2, Lock, Play } from "lucide-react";
 import { getGameStats, getGameProgress } from "@/lib/games.functions";
 import { fmtCoins, BOOKLINK_BG, BOOKLINK_GOLD, MAX_LEVEL } from "@/components/mini-games/shared";
