@@ -77,8 +77,8 @@ function FlappyGame({ session }: { session: Session }) {
   const deadRef = useRef(false);
   const [, force] = useState(0);
   const level = session.progress.level;
-  const speed = SPEED_BASE + (level - 1) * 0.35;
-  const required = 5 * level;
+  const speed = SPEED_BASE + Math.min(level * 0.05, 4);
+  const required = 3 + Math.min(Math.floor(level / 5), 17);
 
   const reset = () => {
     yRef.current = H / 2; vRef.current = 0;
@@ -201,7 +201,7 @@ function FlappyGame({ session }: { session: Session }) {
 // ============================================================
 function MemoryGame({ session }: { session: Session }) {
   const level = session.progress.level;
-  const pairs = Math.min(8, 3 + Math.floor(level / 2));
+  const pairs = Math.min(8, 3 + Math.floor(level / 8));
   const symbols = ["📕","📜","🪶","🗝️","🕯️","📖","🎭","⚜️"].slice(0, pairs);
   const { muted } = useMute();
   const buildDeck = () => {
@@ -270,7 +270,7 @@ function MemoryGame({ session }: { session: Session }) {
 // ============================================================
 function ReflexGame({ session }: { session: Session }) {
   const level = session.progress.level;
-  const threshold = Math.max(220, 600 - level * 35);
+  const threshold = Math.max(220, 600 - Math.min(level, 10) * 35);
   const ROUNDS = 5;
   const { muted } = useMute();
   const [state, setState] = useState<"idle"|"wait"|"go"|"done">("idle");
@@ -335,7 +335,7 @@ function ReflexGame({ session }: { session: Session }) {
 // ============================================================
 function TapGame({ session }: { session: Session }) {
   const level = session.progress.level;
-  const goal = 20 + level * 5;
+  const goal = 18 + Math.min(level, 30);
   const TIME = 10;
   const { muted } = useMute();
   const [count, setCount] = useState(0);
@@ -379,7 +379,7 @@ function TapGame({ session }: { session: Session }) {
 // ============================================================
 function PuzzleGame({ session }: { session: Session }) {
   const level = session.progress.level;
-  const TIME = Math.max(6, 14 - level);
+  const TIME = Math.max(5, 14 - Math.min(level, 8));
   const { muted } = useMute();
   function shuf() { const a = [1,2,3,4,5,6,7,8,9]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
   const [order, setOrder] = useState(shuf);
